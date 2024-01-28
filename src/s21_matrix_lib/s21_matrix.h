@@ -8,12 +8,8 @@
 #include "stdint.h"
 #include <math.h>
 
-#define S21_INT32_MAX 2147483647
-#define S21_INT32_MIN -2147483648
-
-typedef long unsigned int s21_size_t;
-typedef long unsigned s21_size_t;
-#define S21_NULL ((void *)0)
+#define SUCCESS 1
+#define FAILURE 0
 
 typedef struct matrix_struct {
     double** matrix;

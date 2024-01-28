@@ -29,7 +29,7 @@ START_TEST(create_3) {
   const int rows = 10;
   const int cols = 0;
 
-  matrix_t m = {0};
+  matrix_t m;
   ck_assert_int_eq(s21_create_matrix(rows, cols, &m), INCORRECT_MATRIX);
 }
 END_TEST

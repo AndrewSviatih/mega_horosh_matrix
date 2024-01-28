@@ -1,7 +1,11 @@
 #include "s21_matrix.h"
 
-// int s21_eq_matrix(matrix_t *A, matrix_t *B) {
+int s21_eq_matrix(matrix_t *A, matrix_t *B) {
 
+    int res = SUCCESS;
 
+    if (A == NULL || B == NULL) {
+        res = 1;
+    }
 
-// }
+}
