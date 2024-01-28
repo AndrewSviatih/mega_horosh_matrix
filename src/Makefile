@@ -23,29 +23,29 @@ all: s21_matrix
 s21_matrix: lib tests main final
 
 lib: $(OBJS_STR_LIB)
-	ar rcs $(MY_LIB) $(OBJS_STR_LIB_DONE)
+	  ar rcs $(MY_LIB) $(OBJS_STR_LIB_DONE)
 
 tests: $(OBJS_TESTS)
 
 main:
-	$(CC) -c $(MAIN) -o build/main.o
+	  $(CC) -c $(MAIN) -o build/main.o
 
 final:
-	$(CC) $(CFLAGS) $(C11) build/main.o $(OBJS_TESTS_DONE) -o s21_matrix -L. $(MY_LIB) $(CHECK_LIBS)
+	  $(CC) $(CFLAGS) $(C11) build/main.o $(OBJS_TESTS_DONE) -o s21_matrix -L. $(MY_LIB) $(CHECK_LIBS)
 
 cppcheck:
-	$(CPP) $(CFILES)
+	  $(CPP) $(CFILES)
 
 clang_check:
-	find -name "*.c" -o -name "*.h" | xargs clang-format -n
+		find -name "*.c" -o -name "*.h" | xargs clang-format -n
 
 clean:
-	rm -f s21_matrix $(OBJS_STR_LIB_DONE) $(OBJS_TESTS_DONE) build/main.o $(MY_LIB)
+		rm -f s21_matrix $(OBJS_STR_LIB_DONE) $(OBJS_TESTS_DONE) build/main.o $(MY_LIB)
 
 rebuild: clean s21_matrix
 
 $(OBJS_STR_LIB): %.o: %.c
-	$(CC) $(CFLAGS) $(C11) -c $< -o build/$@
+		$(CC) $(CFLAGS) $(C11) -c $< -o build/$@
 
 $(OBJS_TESTS): %.o: %.c
-	$(CC) $(CFLAGS) $(C11) -c $< -o build/$@
+		$(CC) $(CFLAGS) $(C11) -c $< -o build/$@

@@ -1,39 +1,42 @@
 #include "s21_matrix.h"
 
 int s21_create_matrix(int rows, int columns, matrix_t *result) {
-    int err = 0;
-    double *ptr = NULL;
+  int err = 0;
+  double *ptr = NULL;
 
-    if (rows < 1 || columns < 1) {
-        err = 1;
+  if (rows < 1 || columns < 1) {
+    err = 1;
+  } else {
+    result->rows = rows;
+    result->columns = columns;
+    result->matrix = (double **)malloc(rows * sizeof(double *));
+    if (result->matrix == NULL) {
+      err = 1;
     } else {
-        result->rows = rows;
-        result->columns = columns;
-        result->matrix = (double **)malloc(rows * sizeof(double *));
-        if (result->matrix == NULL) {
-            err = 1;
-        } else {
-            ptr = (double *)malloc(rows * columns * sizeof(double));
-            if (ptr == NULL) {
-                err = 1;
-            } else {
-                for (int i = 0; i < rows; i++) {
-                    result->matrix[i] = ptr + columns * i;
-                }
-            }
+      ptr = (double *)malloc(rows * columns * sizeof(double));
+      if (ptr == NULL) {
+        err = 1;
+      } else {
+        for (int i = 0; i < rows; i++) {
+          result->matrix[i] = ptr + columns * i;
         }
-        if (err) free(result->matrix);
+      }
     }
-    
-    return err;
+    if (err) free(result->matrix);
+  }
+
+  return err;
 }
 
-void s21_remove_matrix(matrix_t *A) { 
+void s21_remove_matrix(matrix_t *A) {
+  if (!s21_is_Emty(A)) {
     free(A->matrix[0]);
     free(A->matrix);
-    A->matrix = NULL;
-    A->rows = 0;
-    A->columns = 0;
+  }
+
+  A->matrix = NULL;
+  A->rows = 0;
+  A->columns = 0;
 }
 
 // int main() {
