@@ -22,7 +22,7 @@ void run_tests(void) {
 
     int counter_testcase = 0;
 
-    Suite *list_cases[] = {S21_NULL};
+    Suite *list_cases[] = {suite_create_matrix(), S21_NULL};
 
     for (Suite **current_testcase = list_cases; *current_testcase != S21_NULL;
         current_testcase++) {
