@@ -22,9 +22,6 @@
 *.la
 *.lo
 
-# .vscode folder
-.vscode/
-
 # Shared objects (inc. Windows DLLs)
 *.dll
 *.so
@@ -57,3 +54,5 @@ dkms.conf
 #s21_matrix
 s21_matrix
 a.out
+# .vscode folder
+.vscode/
