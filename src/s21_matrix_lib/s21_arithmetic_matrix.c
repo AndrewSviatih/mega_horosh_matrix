@@ -134,29 +134,23 @@ int s21_mult_matrix(matrix_t *A, matrix_t *B, matrix_t *result) {
 // }
 
 // int main () {
-//   matrix_t m = {0};
-//   const int rows = rand() % 100 + 1;
-//   const int cols = rand() % 100 + 1;
-//   s21_create_matrix(rows, cols, &m);
-//   matrix_t mtx = {0};
-//   const int rows1 = rand() % 100 + 1;
-//   const int cols1 = rand() % 100 + 1;
-//   s21_create_matrix(rows1, cols1, &mtx);
-
-//   for (int i = 0; i < rows; i++) {
-//     for (int j = 0; j < cols; j++) {
-//       m.matrix[i][j] = get_rand(DBL_MIN, DBL_MAX);
+//   matrix_t matrix_1, matrix_2, res_my, res_org;
+//   int ret = 1;
+//   s21_create_matrix(4, 4, &matrix_1);
+//   s21_create_matrix(4, 4, &matrix_2);
+//   s21_create_matrix(4, 4, &res_org);
+//   for (int i = 0; i < 4; i++) {
+//     for (int j = 0; j < 4; j++) {
+//       matrix_1.matrix[i][j] = i + j;
+//       matrix_2.matrix[i][j] = i + j;
+//       res_org.matrix[i][j] = (i + j) * 2;
 //     }
 //   }
-//   for (int i = 0; i < rows1; i++) {
-//     for (int j = 0; j < cols1; j++) {
-//       mtx.matrix[i][j] = get_rand(DBL_MIN, DBL_MAX);
-//     }
-//   }
-
-//   matrix_t res = {0};
-//   s21_sum_matrix(&m, &mtx, &res);
-//   s21_remove_matrix(&m);
-//   s21_remove_matrix(&mtx);
-//   s21_remove_matrix(&res);
+//   ret = s21_sum_matrix(&matrix_1, &matrix_2, &res_my);
+//   ret = s21_eq_matrix(&res_my, &res_org);
+//   ck_assert_int_eq(ret, 1);
+//   s21_remove_matrix(&matrix_1);
+//   s21_remove_matrix(&matrix_2);
+//   s21_remove_matrix(&res_my);
+//   s21_remove_matrix(&res_org);
 // }
