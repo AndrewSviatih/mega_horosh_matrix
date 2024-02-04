@@ -19,7 +19,8 @@ void run_testcase(Suite *testcase, int counter_testcase) {
 void run_tests(void) {
   int counter_testcase = 0;
 
-  Suite *list_cases[] = {suite_create_matrix(), suite_eq_matrix(), NULL};
+  Suite *list_cases[] = {suite_create_matrix(), suite_eq_matrix(),
+                         suite_sum_matrix(), NULL};
 
   for (Suite **current_testcase = list_cases; *current_testcase != NULL;
        current_testcase++) {
