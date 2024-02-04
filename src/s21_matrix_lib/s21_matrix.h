@@ -1,21 +1,33 @@
-#ifndef STRING_S21_STRING_H
-#define STRING_S21_STRING_H
+#ifndef STRING_S21_MATRIX_H
+#define STRING_S21_MATRIX_H
 
-#include "stdio.h"
-#include "stdlib.h"
-// #include "string.h"
-#include "stdarg.h"
-#include "stdint.h"
+#include <float.h>
 #include <math.h>
 
-#define S21_INT32_MAX 2147483647
-#define S21_INT32_MIN -2147483648
+#include "stdarg.h"
+#include "stdint.h"
+#include "stdio.h"
+#include "stdlib.h"
 
-typedef long unsigned int s21_size_t;
-typedef long unsigned s21_size_t;
-#define S21_NULL ((void *)0)
+enum { OK = 0, INCORRECT_MATRIX = 1, CALC_ERROR = 2 };
 
-// void *s21_memchr(const void *str, int c, s21_size_t n);
+typedef struct matrix_struct {
+  double **matrix;
+  int rows;
+  int columns;
+} matrix_t;
+#endif  // STRING_S21_MATRIX_H
 
+int s21_is_Emty(matrix_t *matrix);
 
-#endif //STRING_S21_STRING_H
+int s21_create_matrix(int rows, int columns, matrix_t *result);
+void s21_remove_matrix(matrix_t *A);
+
+int s21_eq_matrix(matrix_t *A, matrix_t *B);
+
+int s21_sum_matrix(matrix_t *A, matrix_t *B, matrix_t *result);
+int s21_sub_matrix(matrix_t *A, matrix_t *B, matrix_t *result);
+int s21_mult_number(matrix_t *A, double number, matrix_t *result);
+int s21_mult_matrix(matrix_t *A, matrix_t *B, matrix_t *result);
+
+int s21_transpose(matrix_t *A, matrix_t *result);
