@@ -110,16 +110,16 @@ int s21_calc_complements(matrix_t *A, matrix_t *result) {
   if (!s21_is_Emty(A)) {
     if (A->columns == A->rows ) {
       flag = s21_create_matrix(A->rows, A->columns, result);
-      if (result != NULL && flag = OK) {
+      if (result != NULL && flag == OK) {
         matrix_t minorA = {0};
         flag = s21_create_matrix(A->columns, A->rows, &minorA);
-        if (flag == OK) {    
+        if (flag == OK) {
           int m = 0; int n = 0;
           for (int i = 0; i < A->rows; i++) {
             for (int j = 0; j < A->columns; j++) {
-              
+
             }
-          }  
+          }
         } else {
           flag = INCORRECT_MATRIX;
         }
