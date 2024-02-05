@@ -93,6 +93,50 @@ int s21_mult_matrix(matrix_t *A, matrix_t *B, matrix_t *result) {
   return flag;
 }
 
+// int s21_determinant(matrix_t *A, double *result) {
+//   int flag = OK;
+//   if (s21_is_Emty) {
+//     matrix_t subA = {0};
+//   } else {
+//     flag = INCORRECT_MATRIX;
+//   }
+
+// }
+
+int s21_calc_complements(matrix_t *A, matrix_t *result) {
+
+  int flag = OK;
+
+  if (!s21_is_Emty(A)) {
+    if (A->columns == A->rows ) {
+      flag = s21_create_matrix(A->rows, A->columns, result);
+      if (result != NULL && flag = OK) {
+        matrix_t minorA = {0};
+        flag = s21_create_matrix(A->columns, A->rows, &minorA);
+        if (flag == OK) {    
+          int m = 0; int n = 0;
+          for (int i = 0; i < A->rows; i++) {
+            for (int j = 0; j < A->columns; j++) {
+              
+            }
+          }  
+        } else {
+          flag = INCORRECT_MATRIX;
+        }
+      } else {
+        flag = INCORRECT_MATRIX;
+      }
+    } else {
+      flag = CALC_ERROR;
+    }
+  } else {
+    flag = INCORRECT_MATRIX;
+  }
+
+  return flag;
+
+}
+
 // int main () {
 
 //   matrix_t A = {0};
