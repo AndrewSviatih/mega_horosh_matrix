@@ -15,6 +15,7 @@ int s21_create_matrix(int rows, int columns, matrix_t *result) {
     } else {
       ptr = (double *)malloc(rows * columns * sizeof(double));
       if (ptr == NULL) {
+        free(result->matrix);
         err = INCORRECT_MATRIX;
       } else {
         for (int i = 0; i < rows; i++) {

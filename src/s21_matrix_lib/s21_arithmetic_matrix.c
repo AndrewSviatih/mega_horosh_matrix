@@ -103,22 +103,42 @@ int s21_mult_matrix(matrix_t *A, matrix_t *B, matrix_t *result) {
 
 // }
 
+void minor_matrix(matrix_t *A, matrix_t *minorA, int row, int column) {
+  int m = 0, n = 0;
+
+  for (int i = 0; i < minorA->columns; i++) {
+    for (int j = 0; j < minorA->rows; j++) {
+      minorA->matrix[i][j] = i;
+    }
+  }
+}
+
+
 int s21_calc_complements(matrix_t *A, matrix_t *result) {
 
   int flag = OK;
 
   if (!s21_is_Emty(A)) {
-    if (A->columns == A->rows ) {
-      flag = s21_create_matrix(A->rows, A->columns, result);
+    if (A->columns == A->rows) {
+      // fix this. do i need or not malloc?
+        flag = s21_create_matrix(A->rows, A->columns, result);
       if (result != NULL && flag == OK) {
-        matrix_t minorA = {0};
-        flag = s21_create_matrix(A->columns, A->rows, &minorA);
-        if (flag == OK) {
-          int m = 0; int n = 0;
-          for (int i = 0; i < A->rows; i++) {
-            for (int j = 0; j < A->columns; j++) {
+          int m = 0, n = 0;
+          for (int cur_row = 0; cur_row < A->rows; cur_row++) {
+            if (flag == CALC_ERROR) break;
+            for (int cur_col = 0; cur_col < A->columns; cur_col++) {
+              matrix_t minorA = {0};
+              flag = s21_create_matrix(A->columns - 1, A->rows - 1, &minorA);
+              if (flag == OK) {
+                minor_matrix(A, &minorA, cur_row, cur_col);
+                result->matrix[cur_row][cur_col] = cur_row;
 
-            }
+                s21_remove_matrix(&minorA);
+              } else {
+                flag = CALC_ERROR;
+                break;
+              }
+            }  
           }
         } else {
           flag = INCORRECT_MATRIX;
@@ -129,53 +149,50 @@ int s21_calc_complements(matrix_t *A, matrix_t *result) {
     } else {
       flag = CALC_ERROR;
     }
-  } else {
-    flag = INCORRECT_MATRIX;
+    return flag;
   }
 
-  return flag;
+int main () {
 
+  matrix_t A = {0};
+  // matrix_t B = {0};
+  matrix_t res = {0};
+  s21_create_matrix(4, 4, &A);
+  // s21_create_matrix(4, 4, &res);
+  // s21_create_matrix(3, 3, &B);
+  for (int i = 0; i < A.rows; i++) {
+    for (int j = 0; j < A.columns; j++) {
+        A.matrix[i][j] = i;
+        printf("%.2lf ", A.matrix[i][j]);
+    }
+    printf("\n");
+  }
+  printf("\n");
+  // for (int i = 0; i < B.rows; i++) {
+  //   for (int j = 0; j < B.columns; j++) {
+  //       B.matrix[i][j] = i+j;
+  //       printf("%lf ", B.matrix[i][j]);
+  //   }
+  //   printf("\n");
+  // }
+  // printf("\n");
+  int flag = 0;
+  flag = s21_calc_complements(&A, &res);
+  if (flag) {
+    printf("err");
+  } else {
+    for (int i = 0; i < res.columns; i++) {
+      for (int j = 0; j < res.rows; j++) {
+        printf("%.02lf ", res.matrix[i][j]);
+      }
+    printf("\n");
+    }
+  }
+  s21_remove_matrix(&res);
+  s21_remove_matrix(&A);
+  // s21_remove_matrix(&B);
+  
 }
-
-// int main () {
-
-//   matrix_t A = {0};
-//   // matrix_t B = {0};
-//   matrix_t res = {0};
-//   s21_create_matrix(10, 10, &A);
-//   // s21_create_matrix(3, 3, &B);
-//   for (int i = 0; i < A.rows; i++) {
-//     for (int j = 0; j < A.columns; j++) {
-//         A.matrix[i][j] = i;
-//         printf("%lf ", A.matrix[i][j]);
-//     }
-//     printf("\n");
-//   }
-//   printf("\n");
-//   // for (int i = 0; i < B.rows; i++) {
-//   //   for (int j = 0; j < B.columns; j++) {
-//   //       B.matrix[i][j] = i+j;
-//   //       printf("%lf ", B.matrix[i][j]);
-//   //   }
-//   //   printf("\n");
-//   // }
-//   // printf("\n");
-
-//   int flag = s21_transpose(&A, &res);
-//   if (flag) {
-//     printf("err");
-//   } else {
-//     for (int i = 0; i < A.columns; i++) {
-//       for (int j = 0; j < A.rows; j++) {
-//         printf("%lf ", res.matrix[i][j]);
-//       }
-//     printf("\n");
-//     }
-//   }
-//   s21_remove_matrix(&A);
-//   // s21_remove_matrix(&B);
-//   s21_remove_matrix(&res);
-// }
 
 // int main () {
 //   matrix_t matrix_1, matrix_2, res_my, res_org;
