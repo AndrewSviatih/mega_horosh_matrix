@@ -43,9 +43,10 @@ START_TEST(sum_matrix1) {
       m.matrix[i][j] = get_rand(DBL_MIN, DBL_MAX) + 1;
     }
   }
+
   for (int i = 0; i < rows1; i++) {
     for (int j = 0; j < cols1; j++) {
-      mtx.matrix[i][j] = get_rand(DBL_MIN, DBL_MAX);
+      mtx.matrix[i][j] = get_rand(DBL_MIN, DBL_MAX) + 1;
     }
   }
 

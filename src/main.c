@@ -20,7 +20,9 @@ void run_tests(void) {
   int counter_testcase = 0;
 
   Suite *list_cases[] = {suite_create_matrix(), suite_eq_matrix(),
-                         suite_sum_matrix(), NULL};
+                         suite_sum_matrix(), suite_transpose_matrix(), 
+                         suite_sub_matrix(), suite_determinant(),
+                         NULL};
 
   for (Suite **current_testcase = list_cases; *current_testcase != NULL;
        current_testcase++) {
