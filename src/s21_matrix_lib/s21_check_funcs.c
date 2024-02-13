@@ -10,3 +10,8 @@ int s21_is_Emty(matrix_t *matrix) {
   }
   return res;
 }
+
+int is_matrix_can_inverse(matrix_t *A, double *determinant) {
+  s21_determinant(A, determinant);
+  return fabs(*determinant) > 1e-6;
+}
