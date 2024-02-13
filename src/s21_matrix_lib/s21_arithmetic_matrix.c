@@ -165,7 +165,6 @@ int s21_calc_complements(matrix_t *A, matrix_t *result) {
             result->matrix[cur_row][cur_col] = get_complement(cur_row, cur_col, determinant);
           }
         }
-        print_matrix(result);
       } else {
         flag = INCORRECT_MATRIX;
       }
@@ -181,33 +180,28 @@ int s21_calc_complements(matrix_t *A, matrix_t *result) {
 }
 
 // int main() {
+//   int size = 4;
 //   matrix_t m = {0};
-//   const int rows = rand() % 100 + 1;
-//   const int cols = rand() % 100 + 1;
-//   s21_create_matrix(rows, cols, &m);
-//   matrix_t mtx = {0};
-//   const int rows1 = rand() % 100 + 1;
-//   const int cols1 = rand() % 100 + 1;
-//   s21_create_matrix(rows1, cols1, &mtx);
+//   s21_create_matrix(size, size, &m);
 
-//   for (int i = 0; i < rows; i++) {
-//     for (int j = 0; j < cols; j++) {
-//       m.matrix[i][j] = get_rand(DBL_MIN, DBL_MAX) + 1;
-      
-//     }
-//   }
+//   for (int i = 0; i < size; i++)
+//     for (int j = 0; j < size; j++)
+//       m.matrix[i][j] = j + i;
 
-//   for (int i = 0; i < rows1; i++) {
-//     for (int j = 0; j < cols1; j++) {
-//       mtx.matrix[i][j] = get_rand(DBL_MIN, DBL_MAX) + 1;
-//     }
-//   }
+//   double res = 0;
+//   int code = s21_determinant(&m, &res);
 
-  
-
-//   matrix_t res = {0};
-//   s21_sum_matrix(&m, &mtx, &res);
 //   s21_remove_matrix(&m);
-//   s21_remove_matrix(&mtx);
-//   s21_remove_matrix(&res);
+
+//   size = 5;
+//   s21_create_matrix(size, size, &m);
+
+//   for (int i = 0; i < size; i++)
+//     for (int j = 0; j < size; j++)
+//       m.matrix[i][j] = j;
+//   res = 0;
+//   code = s21_determinant(&m, &res);
+//   res, 0, 1e-6;
+
+//   s21_remove_matrix(&m);
 // }
