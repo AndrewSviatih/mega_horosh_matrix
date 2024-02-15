@@ -239,44 +239,15 @@ int s21_inverse_matrix(matrix_t *A, matrix_t *result) {
 //   return min + val * (max - min);
 // }
 
-int main() {
-    /* const int size = rand() % 100 + 1; */
-  matrix_t m = {0};
-  matrix_t expected = {0};
-  int codec1, codec2;
-  codec1 = s21_create_matrix(3, 3, &m);
-  if (codec1) codec2 = s21_create_matrix(3, 3, &expected);
-
-  if (codec1 && codec2) {
-    m.matrix[0][0] = 2;
-    m.matrix[0][1] = 5;
-    m.matrix[0][2] = 7;
-
-    m.matrix[1][0] = 6;
-    m.matrix[1][1] = 3;
-    m.matrix[1][2] = 4;
-
-    m.matrix[2][0] = 5;
-    m.matrix[2][1] = -2;
-    m.matrix[2][2] = -3;
-
-    expected.matrix[0][0] = 1;
-    expected.matrix[0][1] = -1;
-    expected.matrix[0][2] = 1;
-
-    expected.matrix[1][0] = -38;
-    expected.matrix[1][1] = 41;
-    expected.matrix[1][2] = -34;
-
-    expected.matrix[2][0] = 27;
-    expected.matrix[2][1] = -29;
-    expected.matrix[2][2] = 24;
-    matrix_t result = {0};
-    int code = s21_inverse_matrix(&m, &result);
-    s21_remove_matrix(&result);
-
-  }
-      s21_remove_matrix(&m);
-    s21_remove_matrix(&expected);
-    
-}
+//int main() {
+//  matrix_t m = {0};
+//  matrix_t result = {0};
+//  int codec = s21_create_matrix(1, 1, &m);
+//  if (!codec) {
+//    m.matrix[0][0] = 1431.12312331;
+//    int code = s21_inverse_matrix(&m, &result);
+//    printf("%lf, %lf", result.matrix[0][0], 1.0 / m.matrix[0][0]);
+//    s21_remove_matrix(&m);
+//    s21_remove_matrix(&result);
+//  }
+//}

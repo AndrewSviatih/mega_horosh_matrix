@@ -36,9 +36,10 @@ START_TEST(test_one_by_one) {
   matrix_t m = {0};
   matrix_t result = {0};
   int codec = s21_create_matrix(1, 1, &m);
-  if (codec) {
+  if (!codec) {
     m.matrix[0][0] = 1431.12312331;
     int code = s21_inverse_matrix(&m, &result);
+    printf("%lf, %lf", result.matrix[0][0], 1.0 / m.matrix[0][0]);
     ck_assert_int_eq(result.matrix[0][0] == (1.0 / m.matrix[0][0]), 1);
     ck_assert_int_eq(code, OK);
     s21_remove_matrix(&m);
@@ -51,7 +52,7 @@ START_TEST(test_zero_det) {
   matrix_t m = {0};
   matrix_t result = {0};
   int codec = s21_create_matrix(1, 1, &m);
-  if (codec) {
+  if (!codec) {
     int code = s21_inverse_matrix(&m, &result);
     ck_assert_int_eq(code, CALC_ERROR);
     s21_remove_matrix(&m);
@@ -88,7 +89,7 @@ START_TEST(test_not_sqare) {
   matrix_t m = {0};
   matrix_t result = {0};
   int codec = s21_create_matrix(1, 4, &m);
-  if (codec) {
+  if (!codec) {
     int code = s21_inverse_matrix(&m, &result);
     ck_assert_int_eq(code, CALC_ERROR);
     s21_remove_matrix(&m);
@@ -101,9 +102,9 @@ START_TEST(test_normal) {
   matrix_t expected = {0};
   int codec1, codec2;
   codec1 = s21_create_matrix(3, 3, &m);
-  if (codec1) codec2 = s21_create_matrix(3, 3, &expected);
+  if (!codec1) codec2 = s21_create_matrix(3, 3, &expected);
 
-  if (codec1 && codec2) {
+  if (!codec1 && !codec2) {
     m.matrix[0][0] = 2;
     m.matrix[0][1] = 5;
     m.matrix[0][2] = 7;
