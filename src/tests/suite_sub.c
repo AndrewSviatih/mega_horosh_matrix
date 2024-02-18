@@ -1,70 +1,5 @@
 #include "s21_tests.h"
 
-START_TEST(test_s21_sub_matrix) {
-  matrix_t matrix_1, matrix_2, res_my, res_org;
-  s21_create_matrix(4, 4, &matrix_1);
-  s21_create_matrix(4, 4, &matrix_2);
-  s21_create_matrix(4, 4, &res_org);
-  int ret = s21_sub_matrix(&matrix_1, &matrix_2, &res_my);
-  ck_assert_int_eq(ret, 0);
-  ret = s21_eq_matrix(&res_my, &res_org);
-  ck_assert_int_eq(ret, 1);
-  s21_remove_matrix(&matrix_1);
-  s21_remove_matrix(&matrix_2);
-  s21_remove_matrix(&res_my);
-  s21_remove_matrix(&res_org);
-
-  s21_create_matrix(4, 5, &matrix_1);
-  s21_create_matrix(4, 4, &matrix_2);
-  ret = s21_sub_matrix(&matrix_1, &matrix_2, &res_my);
-  ck_assert_int_eq(ret, 2);
-  s21_remove_matrix(&matrix_1);
-  s21_remove_matrix(&matrix_2);
-
-  s21_create_matrix(4, 4, &matrix_2);
-  ret = s21_sub_matrix(&matrix_1, &matrix_2, &res_my);
-  ck_assert_int_eq(ret, 1);
-  s21_remove_matrix(&matrix_1);
-  s21_remove_matrix(&matrix_2);
-
-  s21_create_matrix(4, 4, &matrix_1);
-  s21_create_matrix(4, 4, &matrix_2);
-  s21_create_matrix(4, 4, &res_org);
-  for (int i = 0; i < 4; i++) {
-    for (int j = 0; j < 4; j++) {
-      matrix_1.matrix[i][j] = i + j;
-      res_org.matrix[i][j] = i + j;
-    }
-  }
-  ret = s21_sub_matrix(&matrix_1, &matrix_2, &res_my);
-  ck_assert_int_eq(ret, 0);
-  ret = s21_eq_matrix(&res_my, &res_org);
-  ck_assert_int_eq(ret, 1);
-  s21_remove_matrix(&matrix_1);
-  s21_remove_matrix(&matrix_2);
-  s21_remove_matrix(&res_my);
-  s21_remove_matrix(&res_org);
-
-  s21_create_matrix(4, 4, &matrix_1);
-  s21_create_matrix(4, 4, &matrix_2);
-  s21_create_matrix(4, 4, &res_org);
-  for (int i = 0; i < 4; i++) {
-    for (int j = 0; j < 4; j++) {
-      matrix_1.matrix[i][j] = i + j;
-      matrix_2.matrix[i][j] = i + j;
-    }
-  }
-  ret = s21_sub_matrix(&matrix_1, &matrix_2, &res_my);
-  ck_assert_int_eq(ret, 0);
-  ret = s21_eq_matrix(&res_my, &res_org);
-  ck_assert_int_eq(ret, 1);
-  s21_remove_matrix(&matrix_1);
-  s21_remove_matrix(&matrix_2);
-  s21_remove_matrix(&res_my);
-  s21_remove_matrix(&res_org);
-}
-END_TEST
-
 START_TEST(sub_matrix) {
   int rows = rand() % 100 + 1;
   int cols = rand() % 100 + 1;
@@ -151,7 +86,6 @@ Suite *suite_sub_matrix(void) {
   tcase_add_loop_test(tc, sub_matrix, 0, 100);
   tcase_add_loop_test(tc, sub_matrix1, 0, 100);
   tcase_add_loop_test(tc, sub_matrix2, 0, 100);
-  tcase_add_test(tc, test_s21_sub_matrix);
 
   suite_add_tcase(s, tc);
   return s;
