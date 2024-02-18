@@ -192,11 +192,6 @@ int s21_calc_complements(matrix_t *A, matrix_t *result) {
   return flag;
 }
 
-double get_matrix_inverse_element(double determinant,
-                                  double transposed_element) {
-  return 1 / (transposed_element * determinant);
-}
-
 int s21_inverse_matrix(matrix_t *A, matrix_t *result) {
   int flag = OK;
   matrix_t complements_matrix = {0};
@@ -204,26 +199,18 @@ int s21_inverse_matrix(matrix_t *A, matrix_t *result) {
 
   if (!s21_is_Emty(A)) {
     if (A->columns == A->rows) {
-      flag = s21_create_matrix(A->columns, A->rows, result);
-      if (!flag) {
-        double determinant;
         if (A->rows == 1 && A->matrix[0][0] != 0) {
+          flag = s21_create_matrix(A->columns, A->rows, result);
           result->matrix[0][0] = 1.0 / A->matrix[0][0];
-        } else if (is_matrix_can_inverse(A, &determinant)) {
+        } else if (is_matrix_can_inverse(A)) {
+          double determinant;
+          s21_determinant(A, &determinant);
           s21_calc_complements(A, &complements_matrix);
           s21_transpose(&complements_matrix, &transposed_matrix);
-          for (int i = 0; i < result->rows; i++) {
-            for (int j = 0; j < result->columns; j++) {
-              result->matrix[i][j] = get_matrix_inverse_element(
-              determinant, transposed_matrix.matrix[i][j]);
-            }
-          }
+          s21_mult_number(&transposed_matrix, 1 / determinant, result);
         } else {
           flag = CALC_ERROR;
         }
-      } else {
-        flag = INCORRECT_MATRIX;
-      }
     } else {
       flag = CALC_ERROR;
     }
@@ -241,42 +228,45 @@ int s21_inverse_matrix(matrix_t *A, matrix_t *result) {
 //   return min + val * (max - min);
 // }
 
-//int main() {
-//  matrix_t m = {0};
-//  matrix_t expected = {0};
-//  int codec1, codec2;
-//  codec1 = s21_create_matrix(3, 3, &m);
-//  if (!codec1) codec2 = s21_create_matrix(3, 3, &expected);
-//
-//  if (!codec1 && !codec2) {
-//    m.matrix[0][0] = 2;
-//    m.matrix[0][1] = 5;
-//    m.matrix[0][2] = 7;
-//
-//    m.matrix[1][0] = 6;
-//    m.matrix[1][1] = 3;
-//    m.matrix[1][2] = 4;
-//
-//    m.matrix[2][0] = 5;
-//    m.matrix[2][1] = -2;
-//    m.matrix[2][2] = -3;
-//
-//    expected.matrix[0][0] = 1;
-//    expected.matrix[0][1] = -1;
-//    expected.matrix[0][2] = 1;
-//
-//    expected.matrix[1][0] = -38;
-//    expected.matrix[1][1] = 41;
-//    expected.matrix[1][2] = -34;
-//
-//    expected.matrix[2][0] = 27;
-//    expected.matrix[2][1] = -29;
-//    expected.matrix[2][2] = 24;
-//    matrix_t result = {0};
-//    int code = s21_inverse_matrix(&m, &result);
-//
-//    s21_remove_matrix(&m);
-//    s21_remove_matrix(&result);
-//    s21_remove_matrix(&expected);
-//  }
-//}
+int main() {
+  double m[3][3] = {{2, 5, 7}, {6, 3, 4}, {5, -2, -3}};
+  double r[3][3] = {{1, -1, 1}, {-38, 41, -34}, {27, -29, 24}};
+  matrix_t matrix, res_org, res_my;
+  s21_create_matrix(3, 3, &matrix);
+  s21_create_matrix(3, 3, &res_org);
+  for (int i = 0; i < matrix.rows; i++) {
+    for (int j = 0; j < matrix.columns; j++) {
+      matrix.matrix[i][j] = m[i][j];
+      printf("%lf ", matrix.matrix[i][j]);
+    }
+    printf("\n");
+  }
+  for (int i = 0; i < matrix.rows; i++) {
+    for (int j = 0; j < matrix.columns; j++) {
+      res_org.matrix[i][j] = r[i][j];
+    }
+  }
+  printf("\n");
+  int ret = s21_inverse_matrix(&matrix, &res_my);
+  for (int i = 0; i < matrix.rows; i++) {
+    for (int j = 0; j < matrix.columns; j++) {
+      printf("%lf ", res_my.matrix[i][j]);
+    }
+    printf("\n");
+  }
+  printf("\n");
+
+  for (int i = 0; i < matrix.rows; i++) {
+    for (int j = 0; j < matrix.columns; j++) {
+      printf("%lf ", res_org.matrix[i][j]);
+    }
+    printf("\n");
+  }
+  printf("\n");
+
+  ret = s21_eq_matrix(&res_org, &res_my);
+
+  s21_remove_matrix(&matrix);
+  s21_remove_matrix(&res_my);
+  s21_remove_matrix(&res_org);
+}

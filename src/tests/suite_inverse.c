@@ -189,32 +189,15 @@ START_TEST(test_s21_inverse_matrix) {
   for (int i = 0; i < matrix.rows; i++) {
     for (int j = 0; j < matrix.columns; j++) {
       matrix.matrix[i][j] = m[i][j];
-      printf("%lf ", matrix.matrix[i][j]);
     }
-    printf("\n");
   }
   for (int i = 0; i < matrix.rows; i++) {
     for (int j = 0; j < matrix.columns; j++) {
       res_org.matrix[i][j] = r[i][j];
     }
   }
-  printf("\n");
-  int ret = s21_inverse_matrix(&matrix, &res_my);
-  for (int i = 0; i < matrix.rows; i++) {
-    for (int j = 0; j < matrix.columns; j++) {
-      printf("%lf ", res_my.matrix[i][j]);
-    }
-    printf("\n");
-  }
-  printf("\n");
 
-  for (int i = 0; i < matrix.rows; i++) {
-    for (int j = 0; j < matrix.columns; j++) {
-      printf("%lf ", res_org.matrix[i][j]);
-    }
-    printf("\n");
-  }
-  printf("\n");
+  int ret = s21_inverse_matrix(&matrix, &res_my);
 
   ck_assert_int_eq(ret, 0);
   ret = s21_eq_matrix(&res_org, &res_my);
