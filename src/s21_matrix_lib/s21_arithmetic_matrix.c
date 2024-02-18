@@ -6,7 +6,7 @@ int s21_sum_matrix(matrix_t *A, matrix_t *B, matrix_t *result) {
   if (!s21_is_Emty(A) && !s21_is_Emty(B)) {
     if (A->columns == B->columns && A->rows == B->rows) {
       flag = s21_create_matrix(A->rows, A->columns, result);
-      if (result != NULL) {
+      if (!flag) {
         for (int i = 0; i < A->rows; i++) {
           for (int j = 0; j < A->columns; j++) {
             result->matrix[i][j] = A->matrix[i][j] + B->matrix[i][j];
@@ -93,180 +93,118 @@ int s21_mult_matrix(matrix_t *A, matrix_t *B, matrix_t *result) {
   return flag;
 }
 
-void print_matrix(const matrix_t *mtrx) {
-  for (int i = 0; i < mtrx->columns; i++) {
-    for (int j = 0; j < mtrx->rows; j++) {
-      printf("%.2lf ", mtrx->matrix[i][j]);
-    }
-    printf("\n");
-  }
-  printf("\n");
-}
+int s21_calc_complements(matrix_t *A, matrix_t *result) {
+  int code = OK;
 
-void minor_matrix(matrix_t *A, matrix_t *minorA, int row, int column) {
-  int m_row = 0;
-  int m_col = 0;
-  for (int i = 0; i < A->rows; i++) {
-    if (i == row) {
-      continue;
-    }
-    m_col = 0;
-    for (int j = 0; j < A->columns; j++) {
-      if (j == column) {
-        continue;
+  if (!validate(A)) {
+    code = INCORRECT_MATRIX;
+  } else if (A->rows != A->columns) {
+    code = CALC_ERROR;
+  } else {
+    s21_create_matrix(A->rows, A->columns, result);
+
+    if (A->rows == 1) {
+      result->matrix[0][0] = A->matrix[0][0];
+    } else {
+      int sign;
+      matrix_t temp;
+
+      for (int i = 0; i < A->rows; i++) {
+        for (int j = 0; j < A->columns; j++) {
+          minor_mat(i, j, A, &temp);
+          sign = ((i + j) % 2 == 0) ? 1 : -1;
+          result->matrix[i][j] = det(&temp) * sign;
+          s21_remove_matrix(&temp);
+        }
       }
-      minorA->matrix[m_row][m_col] = A->matrix[i][j];
-      m_col++;
     }
-    m_row++;
   }
+
+  return code;
 }
 
 int s21_determinant(matrix_t *A, double *result) {
-  int flag = OK;
-  if (!s21_is_Emty(A)) {
-    if (A->columns == A->rows) {
-      if (A->columns == 1) {
-        *result = A->matrix[0][0];
-      } else if (A->columns == 2) {
-        *result = A->matrix[0][0] * A->matrix[1][1] -
-                  A->matrix[0][1] * A->matrix[1][0];
-      } else {
-        for (int mainColumn = 0; mainColumn < A->columns; mainColumn++) {
-          matrix_t tmp_minor = {0};
-          double subDeterminant = 0.0;
-          s21_create_matrix(A->rows - 1, A->columns - 1, &tmp_minor);
-          minor_matrix(A, &tmp_minor, 0, mainColumn);
-          s21_determinant(&tmp_minor, &subDeterminant);
-          if (mainColumn % 2) {
-            *result -= A->matrix[0][mainColumn] * subDeterminant;
-          } else {
-            *result += A->matrix[0][mainColumn] * subDeterminant;
-          }
-          s21_remove_matrix(&tmp_minor);
-        }
-      }
-    } else {
-      flag = CALC_ERROR;
-    }
-  } else {
-    flag = INCORRECT_MATRIX;
-  }
+  int code = OK;
 
-  return flag;
-}
+  if (!validate(A))
+    code = INCORRECT_MATRIX;
+  else if (A->rows != A->columns)
+    code = CALC_ERROR;
+  else
+    *result = det(A);
 
-double get_complement(int cur_row, int cur_col, double determinant) {
-  return pow(-1, (cur_row + cur_col)) * determinant;
-}
-
-int s21_calc_complements(matrix_t *A, matrix_t *result) {
-  int flag = OK;
-  matrix_t minorA = {0};
-
-  if (!s21_is_Emty(A)) {
-    if (A->columns == A->rows) {
-      flag = s21_create_matrix(A->columns, A->rows, result);
-      flag = s21_create_matrix(A->columns - 1, A->rows - 1, &minorA);
-      if (flag == OK) {
-        for (int cur_row = 0; cur_row < A->rows; cur_row++) {
-          for (int cur_col = 0; cur_col < A->columns; cur_col++) {
-            double determinant = 0;
-            minor_matrix(A, &minorA, cur_row, cur_col);
-            s21_determinant(&minorA, &determinant);
-            result->matrix[cur_row][cur_col] =
-                get_complement(cur_row, cur_col, determinant);
-          }
-        }
-      } else {
-        flag = INCORRECT_MATRIX;
-      }
-    } else {
-      flag = CALC_ERROR;
-    }
-  } else {
-    flag = INCORRECT_MATRIX;
-  }
-
-  s21_remove_matrix(&minorA);
-  return flag;
+  return code;
 }
 
 int s21_inverse_matrix(matrix_t *A, matrix_t *result) {
-  int flag = OK;
-  matrix_t complements_matrix = {0};
-  matrix_t transposed_matrix = {0};
+  int code = OK;
 
-  if (!s21_is_Emty(A)) {
-    if (A->columns == A->rows) {
-        if (A->rows == 1 && A->matrix[0][0] != 0) {
-          flag = s21_create_matrix(A->columns, A->rows, result);
-          result->matrix[0][0] = 1.0 / A->matrix[0][0];
-        } else if (is_matrix_can_inverse(A)) {
-          double determinant;
-          s21_determinant(A, &determinant);
-          s21_calc_complements(A, &complements_matrix);
-          s21_transpose(&complements_matrix, &transposed_matrix);
-          s21_mult_number(&transposed_matrix, 1 / determinant, result);
-        } else {
-          flag = CALC_ERROR;
-        }
+  if (!validate(A))
+    code = INCORRECT_MATRIX;
+  else if (A->rows != A->columns)
+    code = CALC_ERROR;
+  else {
+    double determinant = det(A);
+
+    if (fabs(determinant) < 1e-7) {
+      code = CALC_ERROR;
     } else {
-      flag = CALC_ERROR;
-    }
-  } else {
-    flag = INCORRECT_MATRIX;
-  }
-  s21_remove_matrix(&complements_matrix);
-  s21_remove_matrix(&transposed_matrix);
+      if (A->columns == 1) {
+        s21_create_matrix(A->columns, A->rows, result);
+        result->matrix[0][0] = 1 / A->matrix[0][0];
+      } else {
+        matrix_t comp, trans;
 
-  return flag;
+        s21_calc_complements(A, &comp);
+        s21_transpose(&comp, &trans);
+
+        s21_mult_number(&trans, 1 / determinant, result);
+
+        s21_remove_matrix(&comp);
+        s21_remove_matrix(&trans);
+      }
+    }
+  }
+
+  return code;
 }
 
-// double get_rand(double min, double max) {
-//   double val = (double)rand() / RAND_MAX;
-//   return min + val * (max - min);
-// }
+void minor_mat(int row, int column, matrix_t *M, matrix_t *result) {
+  s21_create_matrix(M->rows - 1, M->columns - 1, result);
 
-int main() {
-  double m[3][3] = {{2, 5, 7}, {6, 3, 4}, {5, -2, -3}};
-  double r[3][3] = {{1, -1, 1}, {-38, 41, -34}, {27, -29, 24}};
-  matrix_t matrix, res_org, res_my;
-  s21_create_matrix(3, 3, &matrix);
-  s21_create_matrix(3, 3, &res_org);
-  for (int i = 0; i < matrix.rows; i++) {
-    for (int j = 0; j < matrix.columns; j++) {
-      matrix.matrix[i][j] = m[i][j];
-      printf("%lf ", matrix.matrix[i][j]);
-    }
-    printf("\n");
-  }
-  for (int i = 0; i < matrix.rows; i++) {
-    for (int j = 0; j < matrix.columns; j++) {
-      res_org.matrix[i][j] = r[i][j];
+  int di = 0, dj = 0;
+
+  for (int i = 0; i < result->rows; i++) {
+    if (i == row) di = 1;
+    dj = 0;
+
+    for (int j = 0; j < result->columns; j++) {
+      if (j == column) dj = 1;
+      result->matrix[i][j] = M->matrix[i + di][j + dj];
     }
   }
-  printf("\n");
-  int ret = s21_inverse_matrix(&matrix, &res_my);
-  for (int i = 0; i < matrix.rows; i++) {
-    for (int j = 0; j < matrix.columns; j++) {
-      printf("%lf ", res_my.matrix[i][j]);
+}
+
+double det(matrix_t *M) {
+  double result = 0;
+
+  if (M->rows == 1)
+    result = M->matrix[0][0];
+  else if (M->rows == 2)
+    result = (M->matrix[0][0] * M->matrix[1][1]) -
+        (M->matrix[0][1] * M->matrix[1][0]);
+  else {
+    int sign = 1;
+    for (int i = 0; i < M->rows; i++) {
+      matrix_t temp;
+      minor_mat(0, i, M, &temp);
+
+      result += sign * M->matrix[0][i] * det(&temp);
+      sign *= -1;
+
+      s21_remove_matrix(&temp);
     }
-    printf("\n");
   }
-  printf("\n");
 
-  for (int i = 0; i < matrix.rows; i++) {
-    for (int j = 0; j < matrix.columns; j++) {
-      printf("%lf ", res_org.matrix[i][j]);
-    }
-    printf("\n");
-  }
-  printf("\n");
-
-  ret = s21_eq_matrix(&res_org, &res_my);
-
-  s21_remove_matrix(&matrix);
-  s21_remove_matrix(&res_my);
-  s21_remove_matrix(&res_org);
+  return result;
 }
