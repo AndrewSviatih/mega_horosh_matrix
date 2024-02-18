@@ -1,34 +1,5 @@
 #include "s21_matrix.h"
 
-// int s21_create_matrix(int rows, int columns, matrix_t *result) {
-//   int err = OK;
-//   double *ptr = NULL;
-
-//   if (rows < 1 || columns < 1) {
-//     err = INCORRECT_MATRIX;
-//   } else {
-//     result->rows = rows;
-//     result->columns = columns;
-//     result->matrix = (double **)malloc(rows * sizeof(double *));
-//     if (result->matrix == NULL) {
-//       err = INCORRECT_MATRIX;
-//     } else {
-//       ptr = (double *)malloc(rows * columns * sizeof(double));
-//       if (ptr == NULL) {
-//         free(result->matrix);
-//         err = INCORRECT_MATRIX;
-//       } else {
-//         for (int i = 0; i < rows; i++) {
-//           result->matrix[i] = ptr + columns * i;
-//         }
-//       }
-//     }
-//     if (err) free(result->matrix);
-//   }
-
-//   return err;
-// }
-
 int s21_create_matrix(const int rows, const int columns, matrix_t *result) {
   if (rows <= 0 || columns <= 0) return INCORRECT_MATRIX;
 
