@@ -1,4 +1,4 @@
-#include "s21_matrix.h"
+#include "../s21_matrix.h"
 
 int s21_is_Emty(matrix_t *matrix) {
   int res = OK;
