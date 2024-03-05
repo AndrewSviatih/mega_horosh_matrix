@@ -9,7 +9,7 @@
 #include <string.h>
 #include <time.h>
 
-#include "../s21_matrix_lib/s21_matrix.h"
+#include "../s21_matrix.h"
 #define SUCCESS 1
 #define FAILURE 0
 // enum { OK = 0, INCORRECT_MATRIX = 1, CALC_ERROR = 2, MALLOC_FAILED = 3 };

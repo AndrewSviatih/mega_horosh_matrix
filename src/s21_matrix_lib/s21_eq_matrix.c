@@ -1,4 +1,4 @@
-#include "s21_matrix.h"
+#include "../s21_matrix.h"
 
 #define SUCCESS 1
 #define FAILURE 0

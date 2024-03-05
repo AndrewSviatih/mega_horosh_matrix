@@ -1,4 +1,4 @@
-#include "s21_matrix.h"
+#include "../s21_matrix.h"
 
 int s21_create_matrix(const int rows, const int columns, matrix_t *result) {
   if (rows <= 0 || columns <= 0) return INCORRECT_MATRIX;
